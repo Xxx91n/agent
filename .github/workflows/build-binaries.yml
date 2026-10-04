@@ -148,3 +148,24 @@ jobs:
             *.zip
           if-no-files-found: error
           retention-days: 1
+
+  npm-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.release_sha || format('refs/heads/{0}', inputs.release_ref || 'main') }}
+          persist-credentials: false
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Build
+        run: pnpm build
+      - name: Pack npm package
+        run: pnpm pack --pack-destination .
+      - name: Upload npm package artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-package
+          path: '*.tgz'
+          if-no-files-found: error
+          retention-days: 1

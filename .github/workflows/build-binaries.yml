@@ -20,6 +20,15 @@ on:
         required: false
         type: string
   workflow_dispatch:
+    inputs:
+      release_ref:
+        description: Branch to build release binaries from.
+        required: false
+        type: string
+      release_sha:
+        description: Exact release commit SHA to build from.
+        required: false
+        type: string
 
 concurrency:
   group: binaries-${{ github.workflow }}-${{ github.ref }}
